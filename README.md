@@ -35,8 +35,8 @@ module "task" {
 | log_group_name           | Name of the log group to create for task logs         | string |       n/a        |   yes    |
 | log_retention_days       | Set how many days you wish to retain logs             | string |       `7`        |   yes    |
 | task_definition          | Task Definition to create                             | string | `json as string` |   yes    |
-| network_mode             | Set which network mode to use                         | string |    `FARGATE`     |   yes    |
-| requires_compatibilities | Set FARGATE or EC2 Requirement                        | string |       n/a        |   yes    |
+| network_mode             | Set which network mode to use                         | string |    `awsvpc`      |   yes    |
+| requires_compatibilities | Set FARGATE or EC2 Requirement                        | string |    `FARGATE`     |   yes    |
 | kms_key_id               | Optional: Set a KMS Key ID to encrypt logs            | string |       n/a        |    no    |
 | tags                     | Tags to be applied to all resources created           |  map   |     `<map>`      |    no    |
 
