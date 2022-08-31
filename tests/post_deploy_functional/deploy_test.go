@@ -16,8 +16,8 @@ package test
 
 // Basic imports
 import (
+	"os"
 	"path"
-	"regexp"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/files"
@@ -38,8 +38,10 @@ type TerraTestSuite struct {
 func (suite *TerraTestSuite) SetupSuite() {
 	tempTestFolder := test_structure.CopyTerraformFolderToTemp(suite.T(), "../..", ".")
 	_ = files.CopyFile(path.Join("..", "..", ".tool-versions"), path.Join(tempTestFolder, ".tool-versions"))
+	pwd, _ := os.Getwd()
 	suite.TerraformOptions = terraform.WithDefaultRetryableErrors(suite.T(), &terraform.Options{
 		TerraformDir: tempTestFolder,
+		VarFiles:     [](string){path.Join(pwd, "..", "test.tfvars")},
 	})
 	terraform.InitAndApplyAndIdempotent(suite.T(), suite.TerraformOptions)
 }
@@ -57,8 +59,7 @@ func TestRunSuite(t *testing.T) {
 
 // All methods that begin with "Test" are run as tests within a suite.
 func (suite *TerraTestSuite) TestOutput() {
-	output := terraform.Output(suite.T(), suite.TerraformOptions, "string")
+	output := terraform.Output(suite.T(), suite.TerraformOptions, "arn")
 
-	// Output contains only alphanumeric characters
-	suite.Regexp(regexp.MustCompile("^[A-Za-z0-9]+$"), output)
+	suite.NotEmpty(output, "The task should have an arn")
 }
