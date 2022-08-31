@@ -18,7 +18,7 @@ data "aws_caller_identity" "current" {}
 # IAM
 ###############################################################################
 resource "aws_iam_role" "ecs_task_assume" {
-  name = "${var.name}-ecs-task-assume-000"
+  name = "${var.name}-ecs-task-assume-${var.instance}"
 
   assume_role_policy = <<EOF
 {
@@ -42,7 +42,7 @@ EOF
 }
 
 resource "aws_iam_role" "ecs_task_role" {
-  name = "${var.name}-ecs-task-role-000"
+  name = "${var.name}-ecs-task-role-${var.instance}"
   tags = merge(
     var.tags,
     {
@@ -72,7 +72,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "ecs_default_task_role" {
-  name = "${var.name}-ecs-default-task-role-000"
+  name = "${var.name}-ecs-default-task-role-${var.instance}"
   role = aws_iam_role.ecs_task_role.id
 
   policy = <<POLICY

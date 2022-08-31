@@ -17,6 +17,12 @@ variable "name" {
   type        = string
 }
 
+variable "instance" {
+  description = "The resource instance"
+  type        = string
+  default     = "000"
+}
+
 variable "cpu" {
   description = "Task CPU units to provision (1 vCPU = 1024 CPU units)"
   type        = string
