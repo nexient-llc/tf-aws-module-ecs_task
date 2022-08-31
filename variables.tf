@@ -44,6 +44,11 @@ variable "network_mode" {
   description = "Set which network mode to use"
   type        = string
   default     = "awsvpc"
+
+  validation {
+    condition     = contains(["none", "awsvpc", "bridge", "host"], var.network_mode)
+    error_message = "Check valid Docker networking modes here: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition#network_mode"
+  }
 }
 
 variable "requires_compatibilities" {
