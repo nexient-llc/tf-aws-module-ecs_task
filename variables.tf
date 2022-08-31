@@ -55,6 +55,11 @@ variable "requires_compatibilities" {
   description = "Set FARGATE or EC2 Requirement"
   type        = string
   default     = "FARGATE"
+
+  validation {
+    condition     = contains(["EC2", "FARGATE"], var.requires_compatibilities)
+    error_message = "Check valid launch types here: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition#requires_compatibilities"
+  }
 }
 
 variable "log_group_name" {
