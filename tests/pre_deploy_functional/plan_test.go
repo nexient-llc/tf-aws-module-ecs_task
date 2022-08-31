@@ -29,7 +29,7 @@ var ApprovedProviders = []string{
 	"registry.terraform.io/hashicorp/aws",
 }
 
-func TestRandomDefaultExample(t *testing.T) {
+func TestPlan(t *testing.T) {
 	tempTestFolder := test_structure.CopyTerraformFolderToTemp(t, path.Join("..", ".."), ".")
 	_ = files.CopyFile(path.Join("..", "..", ".tool-versions"), path.Join(tempTestFolder, ".tool-versions"))
 	pwd, _ := os.Getwd()
