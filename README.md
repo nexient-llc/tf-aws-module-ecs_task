@@ -53,8 +53,3 @@ module "task" {
 | role_arn        | Role ARN of the Task Role to attach policies to                             |
 | role_assume_id  | Role ID of the Task Assume Role to attach policies to                       |
 | role_assume_arn | Role ARN of the Task Assume Role to attach policies to                      |
-
-### Markdown Notes
-<!-- optional markdown-notes-tree directory description starts here -->
-This modules is used to setup a ECS Task
-<!-- optional markdown-notes-tree directory description ends here -->
