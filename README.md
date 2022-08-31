@@ -5,7 +5,7 @@
 
 ## Overview
 
-What does this module do?
+This module manages an ECS task
 
 ## Pre-Commit hooks
 
