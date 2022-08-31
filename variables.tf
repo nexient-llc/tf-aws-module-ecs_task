@@ -47,7 +47,7 @@ variable "network_mode" {
 
   validation {
     condition     = contains(["none", "awsvpc", "bridge", "host"], var.network_mode)
-    error_message = "Check valid Docker networking modes here: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition#network_mode"
+    error_message = "Check valid Docker networking modes here: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition#network_mode ."
   }
 }
 
@@ -58,7 +58,7 @@ variable "requires_compatibilities" {
 
   validation {
     condition     = contains(["EC2", "FARGATE"], var.requires_compatibilities)
-    error_message = "Check valid launch types here: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition#requires_compatibilities"
+    error_message = "Check valid launch types here: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition#requires_compatibilities ."
   }
 }
 
