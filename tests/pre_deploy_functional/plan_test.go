@@ -15,6 +15,7 @@
 package test
 
 import (
+	"os"
 	"path"
 	"testing"
 
@@ -24,11 +25,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestRandomWithCakeExample(t *testing.T) {
-	tempTestFolder := test_structure.CopyTerraformFolderToTemp(t, "../..", "examples/with_cake")
+var ApprovedProviders = []string{
+	"registry.terraform.io/hashicorp/aws",
+}
+
+func TestPlan(t *testing.T) {
+	tempTestFolder := test_structure.CopyTerraformFolderToTemp(t, path.Join("..", ".."), ".")
 	_ = files.CopyFile(path.Join("..", "..", ".tool-versions"), path.Join(tempTestFolder, ".tool-versions"))
+	pwd, _ := os.Getwd()
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: tempTestFolder,
+		VarFiles:     [](string){path.Join(pwd, "..", "test.tfvars")},
 		PlanFilePath: "terraform.tfplan",
 	})
 
