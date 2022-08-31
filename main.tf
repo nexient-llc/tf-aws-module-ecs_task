@@ -17,28 +17,35 @@ data "aws_caller_identity" "current" {}
 ###############################################################################
 # IAM
 ###############################################################################
+
+data "aws_iam_policy_document" "ecs_task_assume" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "ecs-tasks.amazonaws.com",
+      ]
+    }
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+      ]
+    }
+  }
+}
+
 resource "aws_iam_role" "ecs_task_assume" {
   name = "${var.name}-ecs-task-assume-${var.instance}"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ecs-tasks.amazonaws.com",
-        "AWS": [
-          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-        ]
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-
+  assume_role_policy = data.aws_iam_policy_document.ecs_task_assume.json
 }
 
 resource "aws_iam_role" "ecs_task_role" {
@@ -50,24 +57,35 @@ resource "aws_iam_role" "ecs_task_role" {
     },
   )
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ecs-tasks.amazonaws.com",
-        "AWS": [
-          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-        ]
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
+  assume_role_policy = data.aws_iam_policy_document.ecs_task_assume.json
 }
-EOF
+
+data "aws_iam_policy_document" "ecs_default_task_role" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "ecr:GetAuthorizationToken",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = [
+      "${aws_cloudwatch_log_group.task_logs.arn}",
+    ]
+  }
 
 }
 
@@ -75,31 +93,7 @@ resource "aws_iam_role_policy" "ecs_default_task_role" {
   name = "${var.name}-ecs-default-task-role-${var.instance}"
   role = aws_iam_role.ecs_task_role.id
 
-  policy = <<POLICY
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ecr:GetAuthorizationToken",
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:BatchGetImage"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Resource": "${aws_cloudwatch_log_group.task_logs.arn}"
-        }
-    ]
-}
-POLICY
+  policy = data.aws_iam_policy_document.ecs_default_task_role.json
 
 }
 
@@ -111,6 +105,7 @@ resource "aws_iam_role_policy_attachment" "ecr" {
 ###############################################################################
 # Task Logs
 ###############################################################################
+
 resource "aws_cloudwatch_log_group" "task_logs" {
   name = var.log_group_name
 
