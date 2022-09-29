@@ -59,7 +59,7 @@ func TestRunSuite(t *testing.T) {
 
 // All methods that begin with "Test" are run as tests within a suite.
 func (suite *TerraTestSuite) TestOutput() {
-	output := terraform.Output(suite.T(), suite.TerraformOptions, "arn")
+	output := terraform.Output(suite.T(), suite.TerraformOptions, "task_definition_arn")
 
-	suite.NotEmpty(output, "The task should have an arn")
+	suite.NotEmpty(output, "The task should have a task_definition_arn")
 }
