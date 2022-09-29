@@ -29,7 +29,6 @@ output "log_group_arn" {
 # Task Outputs
 ###############################################################################
 
-# change this to be more descriptive as other modules will pull it in: e.g. "task_definition_arn"
 output "task_definition_arn" {
   description = "Full arn of task"
   value       = aws_ecs_task_definition.task.arn
