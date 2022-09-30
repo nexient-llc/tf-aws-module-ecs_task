@@ -28,9 +28,15 @@ output "log_group_arn" {
 ###############################################################################
 # Task Outputs
 ###############################################################################
-output "arn" {
+
+output "task_definition_arn" {
   description = "Full arn of task"
   value       = aws_ecs_task_definition.task.arn
+}
+
+output "task_definition_cpu" {
+  description = "CPU size of task definition"
+  value       = aws_ecs_task_definition.task.cpu
 }
 
 output "family" {
