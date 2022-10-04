@@ -35,8 +35,8 @@ variable "memory" {
   default     = "512"
 }
 
-variable "task_definition" {
-  description = "Task Definition to create"
+variable "container_definitions" {
+  description = "The container definitions to drop in the task"
   type        = string
 }
 

@@ -131,7 +131,7 @@ resource "aws_ecs_task_definition" "task" {
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   cpu                      = var.cpu
   memory                   = var.memory
-  container_definitions    = var.task_definition
+  container_definitions    = var.container_definitions
   tags = merge(
     var.tags,
     {
